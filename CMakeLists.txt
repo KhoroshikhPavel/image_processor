@@ -4,6 +4,8 @@ project(ImageProcessor)
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
+option(ENABLE_NATIVE_OPTIMIZATIONS "Enable native CPU optimizations" ON)
+
 add_executable(
         image_processor
         image_processor.cpp
@@ -45,3 +47,7 @@ add_executable(
 
 target_compile_options(image_processor PRIVATE -O3)
 target_link_options(image_processor PRIVATE -flto=thin)
+
+if(ENABLE_NATIVE_OPTIMIZATIONS AND CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang|AppleClang")
+    target_compile_options(image_processor PRIVATE -march=native)
+endif()
